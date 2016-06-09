@@ -19,10 +19,19 @@
 
 import PackageDescription
 
+let versions = Version(0,0,0)..<Version(10,0,0)
+let urls = [
+    "https://github.com/PerfectlySoft/Perfect.git",
+    "https://github.com/PerfectlySoft/Perfect-CURL.git",
+    "https://github.com/PerfectlySoft/Perfect-PostgreSQL.git",
+    "https://github.com/PerfectlySoft/Perfect-SQLite.git",
+    "https://github.com/PerfectlySoft/Perfect-Redis.git",
+    "https://github.com/PerfectlySoft/Perfect-MySQL.git",
+    "https://github.com/PerfectlySoft/Perfect-MongoDB.git"    
+]
+
 let package = Package(
 	name: "PerfectTemplate",
 	targets: [],
-	dependencies: [
-	                  .Package(url:"https://github.com/PerfectlySoft/Perfect.git", majorVersion: 0, minor: 19)
-    ]
+	dependencies: urls.map { .Package(url: $0, versions: versions) }
 )
