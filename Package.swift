@@ -19,7 +19,6 @@
 
 import PackageDescription
 
-let versions = Version(0,0,0)..<Version(10,0,0)
 let urls = [
 	"https://github.com/PerfectlySoft/Perfect-HTTPServer.git",
 	"https://github.com/PerfectlySoft/Perfect-FastCGI.git",
@@ -32,11 +31,12 @@ let urls = [
     "https://github.com/PerfectlySoft/Perfect-WebSockets.git",
     "https://github.com/PerfectlySoft/Perfect-Notifications.git",
     "https://github.com/PerfectlySoft/Perfect-Mustache.git",
-    "https://github.com/PerfectlySoft/Perfect-XML.git"
+    "https://github.com/PerfectlySoft/Perfect-XML.git",
+    "https://github.com/PerfectlySoft/Perfect-FileMaker.git"
 ]
 
 let package = Package(
 	name: "PerfectTemplateTest",
 	targets: [],
-	dependencies: urls.map { .Package(url: $0, versions: versions) }
+	dependencies: urls.map { .Package(url: $0, majorVersion: 2, minor: 0) }
 )

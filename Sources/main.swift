@@ -25,8 +25,37 @@ import PerfectMustache
 #if os(macOS)
 import Darwin
 #else
-import Glibc
+import SwiftGlibc
 #endif
+
+//
+class Test: JSONConvertibleObject {
+	
+	static let registerName = "test"
+	
+	var one = 0
+	
+	override init() {
+		super.init()
+	}
+	
+	override func setJSONValues(_ values: [String : Any]) {
+		self.one = getJSONValue(named: "One", from: values, defaultValue: 42)
+	}
+	override func getJSONValues() -> [String : Any] {
+		return [JSONDecoding.objectIdentifierKey:Test.registerName, "One":1]
+	}
+}
+
+JSONDecoding.registerJSONDecodable(name: Test.registerName, creator: { return Test() })
+
+do {
+	let encoded = try Test().jsonEncodedString()
+	let decoded = try encoded.jsonDecode() as? Test
+} catch {
+	
+}
+//
 
 //Log.logger = SysLogger()
 //Log.debug(message: "Debug message")
@@ -73,12 +102,13 @@ struct UploadHandler: MustachePageHandler { // all template handlers must inheri
 
 // Add our routes and such
 // Register your own routes and handlers
-Routing.Routes["/test.html"] = {
+var routes = Routes()
+routes.add(method: .get, uri: "test.html", handler: {
     request, response in
 	
 	let c1 = HTTPCookie(name: " cookie 1", value: "value 1", domain: nil, expires: nil, path: nil, secure: false, httpOnly: false)
 	response.addCookie(c1)
-	let c2 = HTTPCookie(name: "cookie 2", value: "value 2", domain: nil, expires: nil, path: nil, secure: false, httpOnly: false)
+	let c2 = HTTPCookie(name: "cookie 2", value: "value 2", domain: nil, expires: .absoluteSeconds(0), path: nil, secure: false, httpOnly: false)
 	response.addCookie(c2)
 	
 	response.setBody(string: "\(request.cookies)")
@@ -90,10 +120,14 @@ Routing.Routes["/test.html"] = {
 	
 //	let webRoot = request.documentRoot
 //	mustacheRequest(request: request, response: response, handler: UploadHandler(), templatePath: webRoot + "/test.html")
-}
+})
 
 struct Filter404: HTTPResponseFilter {
 	func filterBody(response: HTTPResponse, callback: (HTTPResponseFilterResult) -> ()) {
+		guard let _ = response.request.scratchPad["TEST"] as? Int else {
+			response.status = .internalServerError
+			return callback(.halt)
+		}
 		callback(.continue)
 	}
 	
@@ -108,9 +142,23 @@ struct Filter404: HTTPResponseFilter {
 	}
 }
 
+struct TestScratchPad: HTTPRequestFilter {
+	func filter(request: HTTPRequest, response: HTTPResponse, callback: (HTTPRequestFilterResult) -> ()) {
+		request.scratchPad["TEST"] = 1234
+		callback(.continue(request, response))
+	}
+}
+
+let server = HTTPServer()
+server.documentRoot = webRoot
+server.serverPort = 8181
+server.setResponseFilters([(Filter404(), .high)])
+server.setRequestFilters([(TestScratchPad(), .high)])
+server.addRoutes(routes)
+
 do {
     // Launch the HTTP server on port 8181
-    try HTTPServer(documentRoot: webRoot).setResponseFilters([(Filter404(), .high)]).start(port: 8181)
+    try server.start()
     
 } catch PerfectError.networkError(let err, let msg) {
     print("Network error thrown: \(err) \(msg)")
