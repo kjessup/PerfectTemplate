@@ -1,42 +1,20 @@
-//
-//  Package.swift
-//  PerfectTemplate
-//
-//  Created by Kyle Jessup on 4/20/16.
-//	Copyright (C) 2016 PerfectlySoft, Inc.
-//
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Perfect.org open source project
-//
-// Copyright (c) 2015 - 2016 PerfectlySoft Inc. and the Perfect project authors
-// Licensed under Apache License v2.0
-//
-// See http://perfect.org/licensing.html for license information
-//
-//===----------------------------------------------------------------------===//
-//
-
+// Generated automatically by Perfect Assistant Application
+// Date: 2017-03-28 15:23:26 +0000
 import PackageDescription
-
-let urls = [
-	"https://github.com/PerfectlySoft/Perfect-HTTPServer.git",
-	"https://github.com/PerfectlySoft/Perfect-FastCGI.git",
-    "https://github.com/PerfectlySoft/Perfect-CURL.git",
-    "https://github.com/PerfectlySoft/Perfect-PostgreSQL.git",
-    "https://github.com/PerfectlySoft/Perfect-SQLite.git",
-    "https://github.com/PerfectlySoft/Perfect-Redis.git",
-    "https://github.com/PerfectlySoft/Perfect-MySQL.git",
-    "https://github.com/PerfectlySoft/Perfect-MongoDB.git",
-    "https://github.com/PerfectlySoft/Perfect-WebSockets.git",
-    "https://github.com/PerfectlySoft/Perfect-Notifications.git",
-    "https://github.com/PerfectlySoft/Perfect-Mustache.git",
-    "https://github.com/PerfectlySoft/Perfect-XML.git",
-    "https://github.com/PerfectlySoft/Perfect-FileMaker.git"
-]
-
 let package = Package(
-	name: "PerfectTemplateTest",
-	targets: [],
-	dependencies: urls.map { .Package(url: $0, majorVersion: 2, minor: 0) }
+    name: "PerfectTemplateTest",
+    targets: [],
+    dependencies: [
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-HTTPServer.git", majorVersion: 2),
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-FileMaker.git", majorVersion: 2),
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-Notifications.git", majorVersion: 2),
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-Zip.git", majorVersion: 2),
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-CURL.git", majorVersion: 2),
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-Mustache.git", majorVersion: 2),
+        .Package(url: "https://github.com/PerfectlySoft/Perfect-WebSockets.git", majorVersion: 2),
+        .Package(url: "https://github.com/SwiftORM/SQLite-StORM.git", majorVersion: 1),
+        .Package(url: "https://github.com/SwiftORM/Postgres-StORM.git", majorVersion: 1),
+        .Package(url: "https://github.com/SwiftORM/MongoDB-StORM.git", majorVersion: 1),
+        .Package(url: "https://github.com/SwiftORM/MySQL-StORM.git", majorVersion: 1),
+    ]
 )
